@@ -1,28 +1,26 @@
 #include <iostream>
 #include <stdlib.h>
+#include <math.h>
 
 using namespace std;
 
 int main (){
-    int N = 0, divisore;
+    unsigned int n, d_min;
+    bool primo = true;
 
-    cout << "Immetti un numero positivo qualsiasi: ";
-    cin >> N;
+    cout << "Immetti un numero POSITIVO qualsiasi: ";
+    cin >> n;
+    unsigned int limite_max = (int)sqrt(n);
+
+    for (d_min = 2; d_min <= limite_max && primo; d_min++)
+        primo = (n%d_min != 0);
+
     cout << endl;
 
-    divisore=N-1;
-
-    if (N != 1){
-        while(N % divisore != 0){
-            divisore-=1;
-        }
-        if (divisore != 1)
-            cout << "Il numero " << N << " NON e' un numero PRIMO.";
-        else
-            cout << "Il numero " << N << " e' un numero PRIMO.";
-    }else{
-        cout << "Il numero " << N << " e' un numero PRIMO.";
-    }
+    if (!primo)
+        cout << "Il numero " << n << " NON e' un numero PRIMO.";
+    else
+        cout << "Il numero " << n << " e' un numero PRIMO.";
 
     cout << endl << endl;
 
