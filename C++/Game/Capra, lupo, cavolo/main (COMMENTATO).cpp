@@ -19,7 +19,8 @@ void inizializzaGioco(void);
    assegnando loro il valore desiderato prima che inizi il gioco. */
 
 void transizioneBarca(void);
-/* Stampa a video l'elemento grafico della barca che cambia sponda dopo ogni turno. */
+/* Stampa a video l'elemento grafico della barca che cambia sponda dopo ogni turno.
+   RICORDA! Quando CONTATORE = 1, NON deve essere richiamata. */
 
 void disegnaScenario(void);
 /* Stampa a video lo scenario nel momento in cui viene richiamata
@@ -80,26 +81,37 @@ char scelta;
 /* CODICE PROGRAMMA */
 
 int main(){
+    //Stampa a video scopo e regole del gioco
     messaggioIniziale();
+
+    //Inizializza le variabili del gioco
     inizializzaGioco();
 
+    // Ciclo principale del gioco, il gioco non termina finchè end_game diventa TRUE
+    // Viene utilizzato un contatore per memorizzare il numero di mosse effettuate dall'utente
     for(int mosse = 1; end_game; mosse++){
+        //Visualizza lo spostamento degli elementi da una sponda all'altra.
+        transizioneBarca();
+
+        //Disegna a video lo scenario attuale
         disegnaScenario();
 
-        /* IL CONTROLLA FINE E' MESSO QUI PERCHE' COSI' PRIMA DI VISUALIZZARE L'IPOTETICO MESSAGGIO D'ERRORE
-          L'UTENTE PUO' VISUALIZZARE LO SCENARIO DOPO LE SUE AZIONI E CAPIRE COSI' QUALE ERRORE HA COMMESSO!!!!!!!!!! */
+        //Controlla se il gioco è terminato o meno
         if(controllaFine()){
-            end_game = controllaVittoria() || controllaSconfitta();
             continue;
         }
 
+        //Chiede in input la scelta dell'utente su quale elemento muovere
         interazioneUtente();
+
+        //Rende effettive le modifiche alle variabili indicate dalla scelta dell'utente
         eseguiAzione();
-        transizioneBarca();
     }
 
+    //Visualizza il messaggio finale a seconda dell'esito del gioco
     messaggioFinale();
 
+    //Chiude il programma
     system("PAUSE");
     return 0;
 }
