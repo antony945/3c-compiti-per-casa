@@ -55,39 +55,38 @@ bool end_game;
    scenario imposto dall'utente, altrimenti 'FALSE'. Il gioco finisce quando vittoria = TRUE o sconfitta = TRUE.
    Variabile utilizzata nel loop principale del gioco. */
 
-bool capra_sponda;
+bool capra_sx;
 /* Variabile booleana indicante la posizione della CAPRA nello scenario.
    Assume 'TRUE' se la CAPRA è nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
 
-bool lupo_sponda;
+bool lupo_sx;
 /* Variabile booleana indicante la posizione del LUPO nello scenario.
    Assume 'TRUE' se il LUPO è nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
 
-bool cavolo_sponda;
+bool cavolo_sx;
 /* Variabile booleana indicante la posizione del CAVOLO nello scenario.
    Assume 'TRUE' se il CAVOLO è nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
 
-char scelta;
+unsigned char scelta;
 /* Variabile che memorizza la scelta effettuata in input dal giocatore su quale elemento far muovere da una sponda all'altra.
    (lo spostamento verrà stampato a video con l'ausilio della nuova funzione 'transizioneBarca()'
    Può assumere tre valori:
-   - 'G' o 'g' per capra; la capra si spostesa sulla sponda opposta a seconda della sua posizione di partenza
+   - '1' per capra; la capra si spostesa sulla sponda opposta a seconda della sua posizione di partenza
                           (se si trova sulla sponda dx passerà sulla sponda sx, altrimenti passerà sulla sponda dx)
-   - 'L' o 'l' per lupo; vedi funzionamento capra
-   - 'C' o 'c'per cavolo; vedi funzionamento capra */
+   - '2' per cavolo; vedi funzionamento capra
+   - '3' per lupo; vedi funzionamento capra */
 
 //*******************************************************************************************************************************
 /* CODICE PROGRAMMA */
 
 int main(){
+
     messaggioIniziale();
     inizializzaGioco();
 
     for(int mosse = 1; end_game; mosse++){
         disegnaScenario();
 
-        /* IL CONTROLLA FINE E' MESSO QUI PERCHE' COSI' PRIMA DI VISUALIZZARE L'IPOTETICO MESSAGGIO D'ERRORE
-          L'UTENTE PUO' VISUALIZZARE LO SCENARIO DOPO LE SUE AZIONI E CAPIRE COSI' QUALE ERRORE HA COMMESSO!!!!!!!!!! */
         if(controllaFine()){
             end_game = controllaVittoria() || controllaSconfitta();
             continue;
@@ -105,6 +104,20 @@ int main(){
 }
 
 void messaggioIniziale(){
+    cout << endl;
+    cout << " ____________________ BENVENUTO AL GIOCO CAPRA-CAVOLO-LUPO ____________________" << endl;
+    cout << " \t\t\t\t SCOPO DEL GIOCO"<< endl;
+    cout << endl;
+    cout << "   Aiuta un contadino a portare da una parte all'altra del fiume i suoi averi:" << endl;
+    cout << "                       Una capra, un cavolo e un lupo " << endl;
+    cout << "            Per attraversare il fiume hai a disposizione una barca" << endl;
+    cout << "    Ma la barca può portare solo una cosa alla volta oltre che al contadino" << endl;
+    cout << " Attenzione pero': se lasci da soli capra e cavolo la capra si mangia il cavolo ";
+    cout << "     Analogamenete se lasci da soli lupo e capra il lupo si pappa la capra..." << endl;
+    cout << " \t\t\t     Come fare? Buona fortuna!!!" << endl;
+    cout << endl;
+    cout << "________________________________________________________________________________";
+    system ("PAUSE");
 }
 
 void messaggioFinale(){
@@ -123,18 +136,66 @@ void interazioneUtente(){
 }
 
 void eseguiAzione(){
+    switch(scelta){
+    case 1: //CAPRA
+        if(mosse%2 != 0){ //BARCA SPONDA DX
+            if(!capra_sx){ //CAPRA SPONDA DX
+                capra_sx = true;
+            }else{ //CAPRA SPONDA SX
+                /* MESSAGGIO DI ERRORE */
+            }
+        }else{ //BARCA SPONDA SX
+            if(capra_sx){ //CAPRA SPONDA SX
+                capra_sx = false;
+            }else{ //CAPRA SPONDA DX
+                /* MESSAGGIO DI ERRORE */
+            }
+        }
+
+        break;
+
+    case 2: //CAVOLO
+        if(mosse%2 != 0){ //BARCA SPONDA DX
+            if(!cavolo_sx){ //CAVOLO SPONDA DX
+                cavolo_sx = true;
+            }else{ //CAVOLO SPONDA SX
+                /* MESSAGGIO DI ERRORE */
+            }
+        }else{ //BARCA SPONDA SX
+            if(cavolo_sx){ //CAVOLO SPONDA SX
+                cavolo_sx = false;
+            }else{ //CAVOLO SPONDA DX
+                /* MESSAGGIO DI ERRORE */
+            }
+        }
+
+        break;
+
+    case 3: //LUPO
+        if(mosse%2 != 0){ //BARCA SPONDA DX
+            if(!lupo_sx){ //LUPO SPONDA DX
+                lupo_sx = true;
+            }else{ //LUPO SPONDA SX
+                /* MESSAGGIO DI ERRORE */
+            }
+        }else{ //BARCA SPONDA SX
+            if(lupo_sx){ //LUPO SPONDA SX
+                lupo_sx = false;
+            }else{ //LUPO SPONDA DX
+                /* MESSAGGIO DI ERRORE */
+            }
+        }
+
+        break;
+    }
 }
 
 bool controllaFine(){ //IMPLEMENTATA
-    //Dichiara variabile contenente il valore della funzione
-    bool controlla_fine = FALSE;
+    bool controlla_fine = false;
 
-    //Controllo della fine del gioco
     if(controllaVittoria() || controllaSconfitta())
-        //Assegna alla variabile locale della funzione valore 'TRUE'
-        controlla_fine = TRUE;
+        controlla_fine = true;
 
-    //Ritorna il valore contenuto nella variabile 'controlla_fine'. Se 'TRUE', gioco terminato, altrimenti gioco ancora in corso
     return controlla_fine;
 }
 
