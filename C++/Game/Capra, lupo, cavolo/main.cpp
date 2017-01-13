@@ -76,6 +76,10 @@ unsigned char scelta;
    - '2' per cavolo; vedi funzionamento capra
    - '3' per lupo; vedi funzionamento capra */
 
+unsigned int mosse;
+/* Variabile che memorizza il numero di mosse effettuate dall'utente durante il corso del gioco.
+   Utilizzata come contatore del ciclo for in quanto se numero mosse dispari, barca a dx, altrimenti barca a sx.
+
 //*******************************************************************************************************************************
 /* CODICE PROGRAMMA */
 
@@ -84,7 +88,7 @@ int main(){
     messaggioIniziale();
     inizializzaGioco();
 
-    for(int mosse = 1; end_game; mosse++){
+    for(mosse = 1; end_game;){
         disegnaScenario();
 
         if(controllaFine()){
@@ -103,7 +107,7 @@ int main(){
     return 0;
 }
 
-void messaggioIniziale(){
+void messaggioIniziale(){ //IMPLEMENTATA
     cout << endl;
     cout << " ____________________ BENVENUTO AL GIOCO CAPRA-CAVOLO-LUPO ____________________" << endl;
     cout << " \t\t\t\t SCOPO DEL GIOCO"<< endl;
@@ -135,20 +139,24 @@ void disegnaScenario(){
 void interazioneUtente(){
 }
 
-void eseguiAzione(){
+void eseguiAzione(){ //IMPLEMENTATA
     switch(scelta){
     case 1: //CAPRA
         if(mosse%2 != 0){ //BARCA SPONDA DX
             if(!capra_sx){ //CAPRA SPONDA DX
                 capra_sx = true;
+                mosse++;
             }else{ //CAPRA SPONDA SX
-                /* MESSAGGIO DI ERRORE */
+                cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
+                cout << "La barca si trova a destra, mentre la capra sulla sponda opposta. Riprovare.";
             }
         }else{ //BARCA SPONDA SX
             if(capra_sx){ //CAPRA SPONDA SX
                 capra_sx = false;
+                mosse++;
             }else{ //CAPRA SPONDA DX
-                /* MESSAGGIO DI ERRORE */
+                cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
+                cout << "La barca si trova a sinistra, mentre la capra sulla sponda opposta. Riprovare.";
             }
         }
 
@@ -158,14 +166,18 @@ void eseguiAzione(){
         if(mosse%2 != 0){ //BARCA SPONDA DX
             if(!cavolo_sx){ //CAVOLO SPONDA DX
                 cavolo_sx = true;
+                mosse++;
             }else{ //CAVOLO SPONDA SX
-                /* MESSAGGIO DI ERRORE */
+                cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
+                cout << "La barca si trova a destra, mentre il cavolo sulla sponda opposta. Riprovare.";
             }
         }else{ //BARCA SPONDA SX
             if(cavolo_sx){ //CAVOLO SPONDA SX
                 cavolo_sx = false;
+                mosse++;
             }else{ //CAVOLO SPONDA DX
-                /* MESSAGGIO DI ERRORE */
+                cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
+                cout << "La barca si trova a sinistra, mentre il cavolo sulla sponda opposta. Riprovare.";
             }
         }
 
@@ -175,14 +187,18 @@ void eseguiAzione(){
         if(mosse%2 != 0){ //BARCA SPONDA DX
             if(!lupo_sx){ //LUPO SPONDA DX
                 lupo_sx = true;
+                mosse++;
             }else{ //LUPO SPONDA SX
-                /* MESSAGGIO DI ERRORE */
+                cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
+                cout << "La barca si trova a destra, mentre la capra sulla sponda opposta. Riprovare.";
             }
         }else{ //BARCA SPONDA SX
             if(lupo_sx){ //LUPO SPONDA SX
                 lupo_sx = false;
+                mosse++;
             }else{ //LUPO SPONDA DX
-                /* MESSAGGIO DI ERRORE */
+                cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
+                cout << "La barca si trova a sinistra, mentre il lupo sulla sponda opposta. Riprovare.";
             }
         }
 
