@@ -135,13 +135,61 @@ void messaggioIniziale(){ //IMPLEMENTATA
 void messaggioFinale(){
 }
 
-void inizializzaGioco(){
+void inizializzaGioco(){ //IMPLEMENTATA
+    end_game = false;
+    capra_sx = false;
+    cavolo_sx = false;
+    lupo_sx = false;
 }
 
 void transizioneBarca(){
 }
 
-void disegnaScenario(){
+void disegnaScenario(){ //IMPLEMENTATA
+    if (lupo_sx)
+        cout << " lup";
+    else
+        cout << "    ";
+
+
+    if (capra_sx)                   //Personaggi a sinistra
+        cout << " cap";
+    else
+        cout << "    ";
+
+
+    if (cavolo_sx)
+        cout << " cav ";
+    else
+        cout << "     ";
+
+
+    cout <<"                      " << endl;    //Spazio tra le due sponde
+
+
+
+    if (!lupo_sx)
+        cout << " lup";
+    else
+        cout << "    ";
+
+
+    if (!capra_sx)
+        cout << " cap";                         //personaggi a destra
+    else
+        cout << "    ";
+
+
+    if (!cavolo_sx)
+        cout << " cav ";
+    else
+        cout << "     ";
+
+    if (i%2 == 1){
+        cout << "-------------_(___)________________-------------" << endl;     //base caso in cui sia un turno dispari barca a sinistra
+    } else {
+        cout << "-------------________________(___)_-------------" << endl;     //base caso in cui sia un turno pari barca a destra
+    }
 }
 
 void interazioneUtente(){
