@@ -71,14 +71,16 @@ unsigned char scelta;
 /* Variabile che memorizza la scelta effettuata in input dal giocatore su quale elemento far muovere da una sponda all'altra.
    (lo spostamento verrà stampato a video con l'ausilio della nuova funzione 'transizioneBarca()'
    Può assumere tre valori:
-   - '1' per capra; la capra si spostesa sulla sponda opposta a seconda della sua posizione di partenza
-                          (se si trova sulla sponda dx passerà sulla sponda sx, altrimenti passerà sulla sponda dx)
+   - '1' per capra; la capra si sposterà sulla sponda opposta a seconda della sua posizione di partenza
+                    (se si trova sulla sponda dx passerà sulla sponda sx, altrimenti passerà sulla sponda dx)
    - '2' per cavolo; vedi funzionamento capra
-   - '3' per lupo; vedi funzionamento capra */
+   - '3' per lupo; vedi funzionamento capra
+   - Qualsiasi altro carattere per barca; la barca si sposterà sulla sponda opposta senza trasportare nessuno dei
+                                          personaggi sopracitati. */
 
 unsigned int mosse;
 /* Variabile che memorizza il numero di mosse effettuate dall'utente durante il corso del gioco.
-   Utilizzata come contatore del ciclo for in quanto se numero mosse dispari, barca a dx, altrimenti barca a sx.
+   Utilizzata come contatore del ciclo for in quanto se numero mosse dispari, barca a dx, altrimenti barca a sx. */
 
 //*******************************************************************************************************************************
 /* CODICE PROGRAMMA */
@@ -88,7 +90,7 @@ int main(){
     messaggioIniziale();
     inizializzaGioco();
 
-    for(mosse = 1; end_game;){
+    for(mosse = 1; !end_game;){
         disegnaScenario();
 
         if(controllaFine()){
@@ -103,25 +105,31 @@ int main(){
 
     messaggioFinale();
 
+    cout << endl;
     system("PAUSE");
     return 0;
 }
 
 void messaggioIniziale(){ //IMPLEMENTATA
-    cout << endl;
     cout << " ____________________ BENVENUTO AL GIOCO CAPRA-CAVOLO-LUPO ____________________" << endl;
-    cout << " \t\t\t\t SCOPO DEL GIOCO"<< endl;
+
     cout << endl;
+    cout << "\t\t\t\t  SCOPO DEL GIOCO"<< endl;
     cout << "   Aiuta un contadino a portare da una parte all'altra del fiume i suoi averi:" << endl;
     cout << "                       Una capra, un cavolo e un lupo " << endl;
     cout << "            Per attraversare il fiume hai a disposizione una barca" << endl;
-    cout << "    Ma la barca può portare solo una cosa alla volta oltre che al contadino" << endl;
-    cout << " Attenzione pero': se lasci da soli capra e cavolo la capra si mangia il cavolo ";
-    cout << "     Analogamenete se lasci da soli lupo e capra il lupo si pappa la capra..." << endl;
-    cout << " \t\t\t     Come fare? Buona fortuna!!!" << endl;
+    cout << "    Ma la barca puo' portare solo una cosa alla volta oltre che al contadino" << endl;
+    cout << endl;
+
+    cout << "\t\t\t\t    ATTENZIONE!" << endl;
+    cout << "        - Se lasci da soli capra e cavolo, la capra si mangia il cavolo " << endl;
+    cout << "     - Analogamenete se lasci da soli lupo e capra il lupo si pappa la capra..." << endl;
+    cout << "\t\t\t      Come fare? Buona fortuna!!!" << endl;
     cout << endl;
     cout << "________________________________________________________________________________";
-    system ("PAUSE");
+
+    cout << "\n\n \t\t\t";
+    system("PAUSE");
 }
 
 void messaggioFinale(){
@@ -203,6 +211,9 @@ void eseguiAzione(){ //IMPLEMENTATA
         }
 
         break;
+
+    default: //BARCA CON SOLO CONTADINO
+        mosse++;
     }
 }
 
@@ -215,8 +226,27 @@ bool controllaFine(){ //IMPLEMENTATA
     return controlla_fine;
 }
 
-bool controllaVittoria(){
+bool controllaVittoria(){ //IMPLEMENTATA
+    bool controlla_vittoria = false;
+
+    if(capra_sx && cavolo_sx && lupo_sx)
+        controlla_vittoria = true;
+
+    return controlla_vittoria;
 }
 
-bool controllaSconfitta(){
+bool controllaSconfitta(){ //IMPLEMENTATA
+    bool controlla_sconfitta = false;
+
+    if((capra_sx && cavolo_sx && !lupo_sx && (mosse%2 != 0)) || (!capra_sx && !cavolo_sx && lupo_sx && (mosse%2 == 0))){
+        cout << "Hai lasciato la capra con il cavolo da soli nella stessa sponda! \n";
+        controlla_sconfitta = true;
+    }
+
+    if((capra_sx && lupo_sx && !cavolo_sx && (mosse%2 != 0)) || (!capra_sx && !lupo_sx && cavolo_sx && (mosse%2 == 0))){
+        cout << "Hai lasciato la capra con il lupo da soli nella stessa sponda! \n";
+        controlla_sconfitta = true;
+    }
+
+    return controlla_sconfitta;
 }
