@@ -132,7 +132,12 @@ void messaggioIniziale(){ //IMPLEMENTATA
     system("PAUSE");
 }
 
-void messaggioFinale(){
+void messaggioFinale(){ //IMPLEMENTATA
+    /* Se l'utente vince il gioco, stampa messaggio di vittoria del gioco. Se perde, stampa messaggio di sconfitta. */
+    if (controllaVittoria())
+        cout << "\n\n\t\t\t CONGRATULAZIONI! HAI VINTO IL GIOCO.\n\n";
+    if (controllaSconfitta())
+        cout << "\n\n\t\t\t MI DISPIACE! HAI PERSO IL GIOCO.\n\n";
 }
 
 void inizializzaGioco(){ //IMPLEMENTATA
@@ -146,6 +151,8 @@ void transizioneBarca(){
 }
 
 void disegnaScenario(){ //IMPLEMENTATA
+    system("CLS");
+
     if (lupo_sx)
         cout << " lup";
     else
