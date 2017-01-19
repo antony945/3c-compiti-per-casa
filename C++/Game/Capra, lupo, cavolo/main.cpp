@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <string>
 
 using namespace std;
 
@@ -133,12 +134,7 @@ void messaggioIniziale(){ //IMPLEMENTATA
     system("PAUSE");
 }
 
-void messaggioFinale(){ //IMPLEMENTATA
-/* Se l'utente vince il gioco, stampa messaggio di vittoria del gioco. Se perde, stampa messaggio di sconfitta. */
-    if (controllaVittoria())
-        cout << "\n\n\t\t\t CONGRATULAZIONI! HAI VINTO IL GIOCO.\n\n";
-    if (controllaSconfitta())
-        cout << "\n\n\t\t\t MI DISPIACE! HAI PERSO IL GIOCO.\n\n";
+void messaggioFinale(){
 }
 
 void inizializzaGioco(){
@@ -291,11 +287,121 @@ void eseguiAzione(){ //IMPLEMENTATA
     }
 }
 
-void transizioneBarca(){ //DA FINIRE
-    if(turni%2 != 0){
+void transizioneBarca(){ //IMPLEMENTATA
+    string barca("(___)");
 
-    }else{
+    string spazio_lupo_sx("    ");
+    string spazio_capra_sx("    ");
+    string spazio_cavolo_sx("     ");
 
+    string spazio_lupo_dx("    ");
+    string spazio_capra_dx("    ");
+    string spazio_cavolo_dx("     ");
+
+    switch(scelta){
+    case 1: //CAPRA
+        //Personaggi a sinistra
+        if (lupo_sx)
+            spazio_lupo_sx = " lup";
+
+        if (cavolo_sx)
+            spazio_cavolo_sx = " cav ";
+
+        //Personaggi a destra
+        if (!lupo_sx)
+            spazio_lupo_dx = " lup";
+
+        if (!cavolo_sx)
+            spazio_cavolo_dx = " cav ";
+
+        barca = "(cap)";
+        break;
+
+    case 2: //CAVOLO
+        //Personaggi a sinistra
+        if (lupo_sx)
+            spazio_lupo_sx = " lup";
+
+        if (capra_sx)
+            spazio_capra_sx = " cap";
+
+        //Personaggi a destra
+        if (!lupo_sx)
+            spazio_lupo_dx = " lup";
+
+        if (!capra_sx)
+            spazio_capra_dx = " cap";
+
+        barca = "(cav)";
+        break;
+
+    case 3: //LUPO
+        //Personaggi a sinistra
+        if (capra_sx)
+            spazio_capra_sx = " cap";
+
+        if (cavolo_sx)
+            spazio_cavolo_sx = " cav ";
+
+        //Personaggi a destra
+        if (!capra_sx)
+            spazio_capra_dx = " cap";
+
+        if (!cavolo_sx)
+            spazio_cavolo_dx = " cav ";
+
+        barca = "(lup)";
+        break;
+    }
+
+    if((turni-1)%2 != 0){ //BARCA DA DESTRA A SINISTRA
+        system("CLS");
+        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
+        cout << "                      "; //Spazio tra le due sponde
+        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
+        cout << endl;
+        cout << "-------------________________" << barca << "_-------------" << endl;
+        system("PAUSE");
+
+        system("CLS");
+        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
+        cout << "                      "; //Spazio tra le due sponde
+        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
+        cout << endl;
+        cout << "-------------_________" << barca << "________-------------" << endl;
+        system("PAUSE");
+
+        system("CLS");
+        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
+        cout << "                      "; //Spazio tra le due sponde
+        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
+        cout << endl;
+        cout << "-------------_" << barca << "________________-------------" << endl;
+        system("PAUSE");
+    }else{ //BARCA DA SINISTRA A DESTRA
+        system("CLS");
+        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
+        cout << "                      "; //Spazio tra le due sponde
+        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
+        cout << endl;
+        cout << "-------------_" << barca << "________________-------------" << endl;
+        system("PAUSE");
+
+        system("CLS");
+        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
+        cout << "                      "; //Spazio tra le due sponde
+        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
+        cout << endl;
+        cout << "-------------_________" << barca << "________-------------" << endl;
+        system("PAUSE");
+
+        system("CLS");
+        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
+        cout << "                      "; //Spazio tra le due sponde
+        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
+        cout << endl;
+        cout << "-------------________________" << barca << "_-------------" << endl;
+        system("PAUSE");
     }
 }
 
