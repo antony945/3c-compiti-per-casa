@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <windows.h>
 
 using namespace std;
 
@@ -26,12 +27,14 @@ void disegnaScenario(void);
 /* Stampa a video lo scenario nel momento in cui viene richiamata
    a seconda del valore delle variabili utilizzate. */
 
-void interazioneUtente(void);
+bool interazioneUtente();
 /* Permette all'utente di scegliere la mossa da compiere al fine di vincere il gioco.
-   NON cambia valore delle variabili utilizzate, ma MEMORIZZA la scelta fatta. */
+   NON cambia valore delle variabili utilizzate, ma MEMORIZZA la scelta fatta.
+   Restituisce false se presenti errori nella funzione. */
 
-void eseguiAzione(void);
-/* CAMBIA il valore delle variabili a seconda delle scelte fatte nella funzione 'interazioneUtente'. */
+bool eseguiAzione();
+/* CAMBIA il valore delle variabili a seconda delle scelte fatte nella funzione 'interazioneUtente'.
+   Restituisce false se presenti errori nella funzione. */
 
 bool controllaFine();
 /* Controlla se, dopo aver applicato i cambiamenti imposti dall'utente alle variabili,
@@ -99,9 +102,10 @@ int main(){
             continue;
         }
 
-        interazioneUtente();
-        eseguiAzione();
-        transizioneBarca();
+        if(interazioneUtente() && eseguiAzione()){
+            transizioneBarca();
+            turni++;
+        }
     }
 
     messaggioFinale();
@@ -109,6 +113,37 @@ int main(){
     cout << endl;
     system("PAUSE");
     return 0;
+}
+
+bool controllaFine(){ //IMPLEMENTATA
+    bool controlla_fine = false;
+
+    if(controllaVittoria() || controllaSconfitta())
+        controlla_fine = true;
+
+    return controlla_fine; // restituisce alla funzione il valore di controlla_fine
+}
+
+bool controllaVittoria(){ //IMPLEMENTATA
+    bool controlla_vittoria = false;
+    if (capra_sx && lupo_sx && cavolo_sx)
+        controlla_vittoria = true;
+
+    return controlla_vittoria; // restituisce alla funzione il valore di controlla_vittoria
+}
+
+bool controllaSconfitta(){ //IMPLEMENTATA
+    bool controlla_sconfitta = false;
+    if (capra_sx && cavolo_sx && !lupo_sx && turni%2!=0)
+        controlla_sconfitta = true;
+    if (capra_sx && !cavolo_sx && lupo_sx && turni%2!=0)
+        controlla_sconfitta =true;
+    if (!capra_sx && !cavolo_sx && lupo_sx && turni%2==0)
+        controlla_sconfitta = true;
+    if (!capra_sx && cavolo_sx && !lupo_sx && turni%2==0)
+        controlla_sconfitta =true;
+
+    return controlla_sconfitta; // restituisce alla funzione il valore di controlla_sconfitta
 }
 
 void messaggioIniziale(){ //IMPLEMENTATA
@@ -134,10 +169,18 @@ void messaggioIniziale(){ //IMPLEMENTATA
     system("PAUSE");
 }
 
-void messaggioFinale(){
+void messaggioFinale(){ //IMPLEMENTATA
+    if (controllaVittoria())
+        cout << "\n\n\t CONGRATULAZIONI! HAI VINTO IL GIOCO. \n\n";
+    if (controllaSconfitta())
+        cout << "\n\n\t MI DISPIACE! HAI PERSO IL GIOCO. \n\n";
 }
 
-void inizializzaGioco(){
+void inizializzaGioco(){ //IMPLEMENTATA
+    end_game = false;
+    capra_sx = false;
+    cavolo_sx = false;
+    lupo_sx = false;
 }
 
 void disegnaScenario(){ //IMPLEMENTATA
@@ -192,39 +235,60 @@ void disegnaScenario(){ //IMPLEMENTATA
 
 }
 
-void interazioneUtente(){ //IMPLEMENTATA
+bool interazioneUtente(){ //IMPLEMENTATA
     /* Interazone con l'utente a cui si pone una domanda a cui deve rispondere tramite tastiera quale personaggio
     (capra, cavolo, lupo e barca!) vuole muovere selezionando tra un elenco*/
-    cout << "Quale personaggio vuoi muovere? " << endl;
-    cout << "Seleziona il numero corrispondente alla scelta: " << endl;
-    cout << "0) Barca " << endl;
-    cout << "1) Capra " << endl;
-    cout << "2) Cavolo " << endl;
-    cout << "3) Lupo " << endl;
+
+    bool success = true;
+
+    cout << endl;
+    cout << "Quale personaggio vuoi muovere? \n";
+    cout << "Digita il numero corrispondente alla scelta: \n" << endl;
+    cout << "0) Barca \n";
+    cout << "1) Capra \n";
+    cout << "2) Cavolo \n";
+    cout << "3) Lupo \n";
+    cout << endl;
+    cout << "Scelta: ";
     cin >> scelta;
+
+    if(scelta != 0 && scelta != 1 && scelta != 2 && scelta != 3){
+        cout << endl;
+        cout << "IL NUMERO DIGITATO NON E' TRA QUELLI SELEZIONABII! \n";
+        cout << "Digitare solamente '0', '1', '2' o '3'. \n" << endl;
+
+        success = false;
+        system("PAUSE");
+    }
+
+    return success;
 }
 
-void eseguiAzione(){ //IMPLEMENTATA
+bool eseguiAzione(){ //IMPLEMENTATA
+    bool success = true;
+
     switch(scelta){
     case 1: //CAPRA
         if(turni%2 != 0){ //BARCA SPONDA DX
             if(!capra_sx){ //CAPRA SPONDA DX
                 capra_sx = true;
-                turni++;
             }else{ //CAPRA SPONDA SX
                 cout << endl;
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a destra, mentre la capra sulla sponda opposta. Riprovare. \n" << endl;
+
+                success = false;
                 system ("PAUSE");
             }
         }else{ //BARCA SPONDA SX
             if(capra_sx){ //CAPRA SPONDA SX
                 capra_sx = false;
-                turni++;
             }else{ //CAPRA SPONDA DX
                 cout << endl;
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a sinistra, mentre la capra sulla sponda opposta. Riprovare. \n" << endl;
+
+                success = false;
                 system ("PAUSE");
             }
         }
@@ -235,21 +299,23 @@ void eseguiAzione(){ //IMPLEMENTATA
         if(turni%2 != 0){ //BARCA SPONDA DX
             if(!cavolo_sx){ //CAVOLO SPONDA DX
                 cavolo_sx = true;
-                turni++;
             }else{ //CAVOLO SPONDA SX
                 cout << endl;
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a destra, mentre il cavolo sulla sponda opposta. Riprovare. \n" << endl;
+
+                success = false;
                 system ("PAUSE");
             }
         }else{ //BARCA SPONDA SX
             if(cavolo_sx){ //CAVOLO SPONDA SX
                 cavolo_sx = false;
-                turni++;
             }else{ //CAVOLO SPONDA DX
                 cout << endl;
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a sinistra, mentre il cavolo sulla sponda opposta. Riprovare. \n" << endl;
+
+                success = false;
                 system ("PAUSE");
             }
         }
@@ -260,31 +326,31 @@ void eseguiAzione(){ //IMPLEMENTATA
         if(turni%2 != 0){ //BARCA SPONDA DX
             if(!lupo_sx){ //LUPO SPONDA DX
                 lupo_sx = true;
-                turni++;
             }else{ //LUPO SPONDA SX
                 cout << endl;
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a destra, mentre la capra sulla sponda opposta. Riprovare. \n" << endl;
+
+                success = false;
                 system ("PAUSE");
             }
         }else{ //BARCA SPONDA SX
             if(lupo_sx){ //LUPO SPONDA SX
                 lupo_sx = false;
-                turni++;
             }else{ //LUPO SPONDA DX
                 cout << endl;
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a sinistra, mentre il lupo sulla sponda opposta. Riprovare. \n" << endl;
+
+                success = false;
                 system ("PAUSE");
             }
         }
 
         break;
-
-    case 0: //BARCA CON SOLO CONTADINO
-        turni++;
-        break;
     }
+
+    return success;
 }
 
 void transizioneBarca(){ //IMPLEMENTATA
@@ -299,6 +365,29 @@ void transizioneBarca(){ //IMPLEMENTATA
     string spazio_cavolo_dx("     ");
 
     switch(scelta){
+    case 0: //BARCA VUOTA
+        //Personaggi a sinistra
+        if (lupo_sx)
+            spazio_lupo_sx = " lup";
+
+        if (capra_sx)
+            spazio_capra_sx = " cap";
+
+        if (cavolo_sx)
+            spazio_cavolo_sx = " cav ";
+
+        //Personaggi a destra
+        if (!lupo_sx)
+            spazio_lupo_dx = " lup";
+
+        if (!capra_sx)
+            spazio_capra_dx = " cap";
+
+        if (!cavolo_sx)
+            spazio_cavolo_dx = " cav ";
+
+        break;
+
     case 1: //CAPRA
         //Personaggi a sinistra
         if (lupo_sx)
@@ -354,14 +443,14 @@ void transizioneBarca(){ //IMPLEMENTATA
         break;
     }
 
-    if((turni-1)%2 != 0){ //BARCA DA DESTRA A SINISTRA
+    if(turni%2 != 0){ //BARCA DA DESTRA A SINISTRA
         system("CLS");
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
         cout << "                      "; //Spazio tra le due sponde
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
         cout << "-------------________________" << barca << "_-------------" << endl;
-        system("PAUSE");
+        Sleep(300);
 
         system("CLS");
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
@@ -369,7 +458,7 @@ void transizioneBarca(){ //IMPLEMENTATA
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
         cout << "-------------_________" << barca << "________-------------" << endl;
-        system("PAUSE");
+        Sleep(300);
 
         system("CLS");
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
@@ -377,7 +466,7 @@ void transizioneBarca(){ //IMPLEMENTATA
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
         cout << "-------------_" << barca << "________________-------------" << endl;
-        system("PAUSE");
+        Sleep(300);
     }else{ //BARCA DA SINISTRA A DESTRA
         system("CLS");
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
@@ -385,7 +474,7 @@ void transizioneBarca(){ //IMPLEMENTATA
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
         cout << "-------------_" << barca << "________________-------------" << endl;
-        system("PAUSE");
+        Sleep(300);
 
         system("CLS");
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
@@ -393,7 +482,7 @@ void transizioneBarca(){ //IMPLEMENTATA
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
         cout << "-------------_________" << barca << "________-------------" << endl;
-        system("PAUSE");
+        Sleep(300);
 
         system("CLS");
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
@@ -401,36 +490,8 @@ void transizioneBarca(){ //IMPLEMENTATA
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
         cout << "-------------________________" << barca << "_-------------" << endl;
-        system("PAUSE");
+        Sleep(300);
     }
 }
 
-bool controllaFine(){ //IMPLEMENTATA
-    bool controlla_fine = false;
 
-    if(controllaVittoria() || controllaSconfitta())
-        controlla_fine = true;
-
-    return controlla_fine; // restituisce alla funzione il valore di controlla_fine
-}
-
-bool controllaVittoria(){ //IMPLEMENTATA
-    bool controlla_vittoria = false;
-    if (capra_sx && lupo_sx && cavolo_sx)
-        controlla_vittoria = true;
-    return controlla_vittoria; // restituisce alla funzione il valore di controlla_vittoria
-}
-
-bool controllaSconfitta(){ //IMPLEMENTATA
-    bool controlla_sconfitta = false;
-    if (capra_sx && cavolo_sx && !lupo_sx && turni%2!=0)
-        controlla_sconfitta = true;
-    if (capra_sx && !cavolo_sx && lupo_sx && turni%2!=0)
-        controlla_sconfitta =true;
-    if (!capra_sx && !cavolo_sx && lupo_sx && turni%2==0)
-        controlla_sconfitta = true;
-    if (!capra_sx && cavolo_sx && !lupo_sx && turni%2==0)
-        controlla_sconfitta =true;
-
-    return controlla_sconfitta; // restituisce alla funzione il valore di controlla_sconfitta
-}

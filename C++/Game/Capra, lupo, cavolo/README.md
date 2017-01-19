@@ -14,3 +14,14 @@ compiendo alcun movimento dei personaggi del gioco.
 cui l'utente effettui azioni permesse dal gioco e che determinino quindi
 una differenza dello scenario del gioco.
 * (Dichiarata variabile mosse come globale e unsigned int).
+
+----------------------------------------------------------------------------
+
+# v. 3.0
+
+## Completato codice gioco
+
+* Completato il codice essenziale del gioco. Ora manca la revisione dell'aspetto
+grafico di esso.
+* Modificato tipo variabili interazioneUtente ed eseguiAzione da void a bool.
+* Aggiunta libreria <windows.h> per poter usare funzione _sleep_ in transizioneBarca.
