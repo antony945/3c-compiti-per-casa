@@ -1,4 +1,4 @@
-#include <iostream>     //1021301
+#include <iostream>
 #include <stdlib.h>
 #include <string>
 #include <windows.h>
@@ -8,9 +8,6 @@ using namespace std;
 //*******************************************************************************************************************************
 /* PROTOTIPI FUNZIONI */
 /* Lista di tutte le funzioni che verranno richiamate all'interno del codice di gioco ('main'). */
-
-void messaggioIniziale(void);
-/* Stampa a video le regole del gioco. */
 
 void messaggioFinale(void);
 /* Stampa a video il messaggio che riceve l'utente dopo la fine del gioco.
@@ -27,27 +24,25 @@ void disegnaScenario(void);
 /* Stampa a video lo scenario nel momento in cui viene richiamata
    a seconda del valore delle variabili utilizzate. */
 
-bool interazioneUtente();
+void interazioneUtente(void);
 /* Permette all'utente di scegliere la mossa da compiere al fine di vincere il gioco.
-   NON cambia valore delle variabili utilizzate, ma MEMORIZZA la scelta fatta.
-   Restituisce false se presenti errori nella funzione. */
+   NON cambia valore delle variabili utilizzate, ma MEMORIZZA la scelta fatta. */
 
-bool eseguiAzione();
-/* CAMBIA il valore delle variabili a seconda delle scelte fatte nella funzione 'interazioneUtente'.
-   Restituisce false se presenti errori nella funzione. */
+void eseguiAzione(void);
+/* CAMBIA il valore delle variabili a seconda delle scelte fatte nella funzione 'interazioneUtente'. */
 
 bool controllaFine();
 /* Controlla se, dopo aver applicato i cambiamenti imposti dall'utente alle variabili,
-   il gioco Ë terminato. PuÚ restituire 'TRUE' (terminato), o 'FALSE' (non terminato).
+   il gioco √® terminato. Pu√≤ restituire 'TRUE' (terminato), o 'FALSE' (non terminato).
    Si compone del valore ritornato dalle funzione controllaVittoria() e controllaSconfitta(). */
 
 bool controllaVittoria();
 /* Controlla se, dopo aver applicato i cambiamenti imposti dall'utente alle variabili,
-   l'utente ha VINTO il gioco. PuÚ restituire 'TRUE' (vittoria), o 'FALSE' (non vittoria). */
+   l'utente ha VINTO il gioco. Pu√≤ restituire 'TRUE' (vittoria), o 'FALSE' (non vittoria). */
 
 bool controllaSconfitta();
 /* Controlla se, dopo aver applicato i cambiamenti imposti dall'utente alle variabili,
-   l'utente ha PERSO il gioco. PuÚ restituire 'TRUE' (sconfitta), o 'FALSE' (non sconfitta). */
+   l'utente ha PERSO il gioco. Pu√≤ restituire 'TRUE' (sconfitta), o 'FALSE' (non sconfitta). */
 
 //*******************************************************************************************************************************
 /* VARIABILI GLOBALI */
@@ -61,37 +56,42 @@ bool end_game;
 
 bool capra_sx;
 /* Variabile booleana indicante la posizione della CAPRA nello scenario.
-   Assume 'TRUE' se la CAPRA Ë nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
+   Assume 'TRUE' se la CAPRA √® nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
 
 bool lupo_sx;
 /* Variabile booleana indicante la posizione del LUPO nello scenario.
-   Assume 'TRUE' se il LUPO Ë nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
+   Assume 'TRUE' se il LUPO √® nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
 
 bool cavolo_sx;
 /* Variabile booleana indicante la posizione del CAVOLO nello scenario.
-   Assume 'TRUE' se il CAVOLO Ë nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
+   Assume 'TRUE' se il CAVOLO √® nella sponda sx, ovvero nella posizione dove il gioco richiede che sia, altrimenti 'FALSE'. */
 
-unsigned int scelta;
+unsigned char scelta;
 /* Variabile che memorizza la scelta effettuata in input dal giocatore su quale elemento far muovere da una sponda all'altra.
-   (lo spostamento verr‡ stampato a video con l'ausilio della nuova funzione 'transizioneBarca()'
-   PuÚ assumere tre valori:
-   - '1' per capra; la capra si sposter‡ sulla sponda opposta a seconda della sua posizione di partenza
-                    (se si trova sulla sponda dx passer‡ sulla sponda sx, altrimenti passer‡ sulla sponda dx)
+   (lo spostamento verr√† stampato a video con l'ausilio della nuova funzione 'transizioneBarca()'
+   Pu√≤ assumere tre valori:
+   - '1' per capra; la capra si sposter√† sulla sponda opposta a seconda della sua posizione di partenza
+                    (se si trova sulla sponda dx passer√† sulla sponda sx, altrimenti passer√† sulla sponda dx)
    - '2' per cavolo; vedi funzionamento capra
    - '3' per lupo; vedi funzionamento capra
-   - '0' per barca; la barca si sposter‡ sulla sponda opposta senza trasportare nessuno dei
+   - '0' per barca; la barca si sposter√† sulla sponda opposta senza trasportare nessuno dei
                                           personaggi sopracitati. */
 
 unsigned int turni;
 /* Variabile che memorizza il numero di mosse effettuate dall'utente durante il corso del gioco.
    Utilizzata come contatore del ciclo for in quanto se numero mosse dispari, barca a dx, altrimenti barca a sx. */
 
+bool errore_logico;
+/* Variabile booleana che assume 'true' se c'√® un errore logico causato dall'interazione con l'utente, altrimenti rimane 'false'. */
+
+string intestazione("\n_____________________ BENVENUTO AL GIOCO CAPRA-CAVOLO-LUPO _____________________\n\n");
+/* Stringa contentente l'intestazione del gioco per poterla scrivere pi√π rapidamente e in modo meno confusionario. */
+
 //*******************************************************************************************************************************
 /* CODICE PROGRAMMA */
 
 int main(){
 
-    messaggioIniziale();
     inizializzaGioco();
 
     for(turni = 1; !end_game;){
@@ -102,7 +102,10 @@ int main(){
             continue;
         }
 
-        if(interazioneUtente() && eseguiAzione()){
+        interazioneUtente();
+        eseguiAzione();
+
+        if(!errore_logico){
             transizioneBarca();
             turni++;
         }
@@ -128,7 +131,6 @@ bool controllaVittoria(){ //IMPLEMENTATA
     bool controlla_vittoria = false;
     if (capra_sx && lupo_sx && cavolo_sx)
         controlla_vittoria = true;
-
     return controlla_vittoria; // restituisce alla funzione il valore di controlla_vittoria
 }
 
@@ -146,9 +148,14 @@ bool controllaSconfitta(){ //IMPLEMENTATA
     return controlla_sconfitta; // restituisce alla funzione il valore di controlla_sconfitta
 }
 
-void messaggioIniziale(){ //IMPLEMENTATA
-    cout << endl;
-    cout << " ____________________ BENVENUTO AL GIOCO CAPRA-CAVOLO-LUPO ____________________" << endl;
+void inizializzaGioco(){ //IMPLEMENTATA
+    lupo_sx = false;         //Inizializzazione variabili
+    capra_sx = false;
+    cavolo_sx = false;
+    end_game = false;
+
+                                //presentazione e spiegazione del funzionamento del gioco
+    cout << intestazione;
 
     cout << endl;
     cout << "\t\t\t\t  SCOPO DEL GIOCO"<< endl;
@@ -169,22 +176,10 @@ void messaggioIniziale(){ //IMPLEMENTATA
     system("PAUSE");
 }
 
-void messaggioFinale(){ //IMPLEMENTATA
-    if (controllaVittoria())
-        cout << "\n\n\t CONGRATULAZIONI! HAI VINTO IL GIOCO. \n\n";
-    if (controllaSconfitta())
-        cout << "\n\n\t MI DISPIACE! HAI PERSO IL GIOCO. \n\n";
-}
-
-void inizializzaGioco(){ //IMPLEMENTATA
-    end_game = false;
-    capra_sx = false;
-    cavolo_sx = false;
-    lupo_sx = false;
-}
-
 void disegnaScenario(){ //IMPLEMENTATA
     system("CLS");
+
+    cout << intestazione;
 
     if (lupo_sx)                    //Personaggi a sinistra
         cout << " lup";
@@ -204,7 +199,7 @@ void disegnaScenario(){ //IMPLEMENTATA
         cout << "     ";
 
 
-    cout <<"                      ";    //Spazio tra le due sponde
+    cout << "                      ";    //Spazio tra le due sponde
 
 
 
@@ -235,40 +230,35 @@ void disegnaScenario(){ //IMPLEMENTATA
 
 }
 
-bool interazioneUtente(){ //IMPLEMENTATA
+void interazioneUtente(){ //IMPLEMENTATA
     /* Interazone con l'utente a cui si pone una domanda a cui deve rispondere tramite tastiera quale personaggio
     (capra, cavolo, lupo e barca!) vuole muovere selezionando tra un elenco*/
 
-    bool success = true;
+    bool errore_inserimento = false;
 
-    cout << endl;
-    cout << "Quale personaggio vuoi muovere? \n";
-    cout << "Digita il numero corrispondente alla scelta: \n" << endl;
-    cout << "0) Barca \n";
-    cout << "1) Capra \n";
-    cout << "2) Cavolo \n";
-    cout << "3) Lupo \n";
-    cout << endl;
-    cout << "Scelta: ";
-    cin >> scelta;
-
-    if(scelta != 0 && scelta != 1 && scelta != 2 && scelta != 3){
+    do {
+        if (errore_inserimento){
+            cout << "Inserisci valori corretti!! (0;1;2;3)"<< endl;
+        }
         cout << endl;
-        cout << "IL NUMERO DIGITATO NON E' TRA QUELLI SELEZIONABII! \n";
-        cout << "Digitare solamente '0', '1', '2' o '3'. \n" << endl;
-
-        success = false;
-        system("PAUSE");
-    }
-
-    return success;
+        cout << "Quale personaggio vuoi muovere? \n";
+        cout << "Digita il numero corrispondente alla scelta: \n" << endl;
+        cout << "0) Barca \n";
+        cout << "1) Capra \n";
+        cout << "2) Cavolo \n";
+        cout << "3) Lupo \n";
+        cout << endl;
+        cout << "Scelta: ";
+        cin >> scelta;
+        errore_inserimento = scelta!= '0' && scelta != '1' && scelta!='2'  && scelta !='3';
+    } while (errore_inserimento);
 }
 
-bool eseguiAzione(){ //IMPLEMENTATA
-    bool success = true;
+void eseguiAzione(){ //IMPLEMENTATA
+    errore_logico = false;
 
     switch(scelta){
-    case 1: //CAPRA
+    case '1': //CAPRA
         if(turni%2 != 0){ //BARCA SPONDA DX
             if(!capra_sx){ //CAPRA SPONDA DX
                 capra_sx = true;
@@ -277,7 +267,7 @@ bool eseguiAzione(){ //IMPLEMENTATA
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a destra, mentre la capra sulla sponda opposta. Riprovare. \n" << endl;
 
-                success = false;
+                errore_logico = true;
                 system ("PAUSE");
             }
         }else{ //BARCA SPONDA SX
@@ -288,14 +278,14 @@ bool eseguiAzione(){ //IMPLEMENTATA
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a sinistra, mentre la capra sulla sponda opposta. Riprovare. \n" << endl;
 
-                success = false;
+                errore_logico = true;
                 system ("PAUSE");
             }
         }
 
         break;
 
-    case 2: //CAVOLO
+    case '2': //CAVOLO
         if(turni%2 != 0){ //BARCA SPONDA DX
             if(!cavolo_sx){ //CAVOLO SPONDA DX
                 cavolo_sx = true;
@@ -304,7 +294,7 @@ bool eseguiAzione(){ //IMPLEMENTATA
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a destra, mentre il cavolo sulla sponda opposta. Riprovare. \n" << endl;
 
-                success = false;
+                errore_logico = true;
                 system ("PAUSE");
             }
         }else{ //BARCA SPONDA SX
@@ -315,14 +305,14 @@ bool eseguiAzione(){ //IMPLEMENTATA
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a sinistra, mentre il cavolo sulla sponda opposta. Riprovare. \n" << endl;
 
-                success = false;
+                errore_logico = true;
                 system ("PAUSE");
             }
         }
 
         break;
 
-    case 3: //LUPO
+    case '3': //LUPO
         if(turni%2 != 0){ //BARCA SPONDA DX
             if(!lupo_sx){ //LUPO SPONDA DX
                 lupo_sx = true;
@@ -331,7 +321,7 @@ bool eseguiAzione(){ //IMPLEMENTATA
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a destra, mentre la capra sulla sponda opposta. Riprovare. \n" << endl;
 
-                success = false;
+                errore_logico = true;
                 system ("PAUSE");
             }
         }else{ //BARCA SPONDA SX
@@ -342,15 +332,13 @@ bool eseguiAzione(){ //IMPLEMENTATA
                 cout << "IMPOSSIBILE MUOVERE ELEMENTO! \n";
                 cout << "La barca si trova a sinistra, mentre il lupo sulla sponda opposta. Riprovare. \n" << endl;
 
-                success = false;
+                errore_logico = true;
                 system ("PAUSE");
             }
         }
 
         break;
     }
-
-    return success;
 }
 
 void transizioneBarca(){ //IMPLEMENTATA
@@ -365,7 +353,7 @@ void transizioneBarca(){ //IMPLEMENTATA
     string spazio_cavolo_dx("     ");
 
     switch(scelta){
-    case 0: //BARCA VUOTA
+    case '0': //BARCA VUOTA
         //Personaggi a sinistra
         if (lupo_sx)
             spazio_lupo_sx = " lup";
@@ -388,7 +376,7 @@ void transizioneBarca(){ //IMPLEMENTATA
 
         break;
 
-    case 1: //CAPRA
+    case '1': //CAPRA
         //Personaggi a sinistra
         if (lupo_sx)
             spazio_lupo_sx = " lup";
@@ -406,7 +394,7 @@ void transizioneBarca(){ //IMPLEMENTATA
         barca = "(cap)";
         break;
 
-    case 2: //CAVOLO
+    case '2': //CAVOLO
         //Personaggi a sinistra
         if (lupo_sx)
             spazio_lupo_sx = " lup";
@@ -424,7 +412,7 @@ void transizioneBarca(){ //IMPLEMENTATA
         barca = "(cav)";
         break;
 
-    case 3: //LUPO
+    case '3': //LUPO
         //Personaggi a sinistra
         if (capra_sx)
             spazio_capra_sx = " cap";
@@ -443,55 +431,45 @@ void transizioneBarca(){ //IMPLEMENTATA
         break;
     }
 
-    if(turni%2 != 0){ //BARCA DA DESTRA A SINISTRA
+    for(int i=0;i<3;i++){
         system("CLS");
-        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
-        cout << "                      "; //Spazio tra le due sponde
-        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
-        cout << endl;
-        cout << "-------------________________" << barca << "_-------------" << endl;
-        Sleep(300);
 
-        system("CLS");
+        cout << intestazione;
         cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
         cout << "                      "; //Spazio tra le due sponde
         cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
         cout << endl;
-        cout << "-------------_________" << barca << "________-------------" << endl;
-        Sleep(300);
 
-        system("CLS");
-        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
-        cout << "                      "; //Spazio tra le due sponde
-        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
-        cout << endl;
-        cout << "-------------_" << barca << "________________-------------" << endl;
-        Sleep(300);
-    }else{ //BARCA DA SINISTRA A DESTRA
-        system("CLS");
-        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
-        cout << "                      "; //Spazio tra le due sponde
-        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
-        cout << endl;
-        cout << "-------------_" << barca << "________________-------------" << endl;
-        Sleep(300);
+        if(turni%2 != 0){ //BARCA DA DESTRA A SINISTRA
+            if(i==0)
+                cout << "-------------________________" << barca << "_-------------" << endl;
+            if(i==1)
+                cout << "-------------_________" << barca << "________-------------" << endl;
+            if(i==2)
+                cout << "-------------_" << barca << "________________-------------" << endl;
 
-        system("CLS");
-        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
-        cout << "                      "; //Spazio tra le due sponde
-        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
-        cout << endl;
-        cout << "-------------_________" << barca << "________-------------" << endl;
-        Sleep(300);
+            Sleep(300);
+        }else{ //BARCA DA SINISTRA A DESTRA
+            if(i==0)
+                cout << "-------------_" << barca << "________________-------------" << endl;
+            if(i==1)
+                cout << "-------------_________" << barca << "________-------------" << endl;
+            if(i==2)
+                cout << "-------------________________" << barca << "_-------------" << endl;
 
-        system("CLS");
-        cout << spazio_lupo_sx << spazio_capra_sx << spazio_cavolo_sx; //Spazio personaggi sx
-        cout << "                      "; //Spazio tra le due sponde
-        cout << spazio_lupo_dx << spazio_capra_dx << spazio_cavolo_dx; //Spazio personaggi sx
-        cout << endl;
-        cout << "-------------________________" << barca << "_-------------" << endl;
-        Sleep(300);
+            Sleep(300);
+        }
     }
 }
 
-
+void messaggioFinale(){ //IMPLEMENTATA
+    cout << endl << "________________________________________________________________________________" << endl;
+    if (controllaVittoria()){
+        cout << endl << "                                   HAI VINTO!                                   " << endl;
+        cout << endl << "Complimenti, sei riuscito a muovere da una sponda all'altra tutti i personaggi.";
+    } else {
+        cout << endl << "                                   HAI PERSO!                                   " << endl;
+        cout << endl << "Mi dispiace, non sei riuscito a spostare i personaggi da una sponda all'altra " << endl << "senza che si mangino a vicenda.";
+    }
+    cout << endl << "________________________________________________________________________________" << endl;
+}
