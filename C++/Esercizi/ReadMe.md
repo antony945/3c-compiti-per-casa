@@ -1,0 +1,2 @@
+### Esercizio 1
+Scrivere un programma in c++ che chieda in input due numeri interi. Definire in input due puntatori, uno per numero intero, e visualizzare in output il valore dei puntatori prima e dopo averli invertiti.
