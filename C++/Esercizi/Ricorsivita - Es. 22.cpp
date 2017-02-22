@@ -1,22 +1,34 @@
 #include <iostream>
+#define CIFRE_TOTALI 3
 
 using namespace std;
 
+void valori(int num, int cifra[], int x){
+    for(x=0; x<CIFRE_TOTALI; x++){
+        cifra[x] = num%((x+1)*10);
+        valori(num, cifra, (x+1)*10);
+    }
+}
+
 int main(){
+    int cifra[CIFRE_TOTALI];
+    int numero;
+    int x;
 
+    cout << "Inserisci numero: ";
+    cin >> numero;
 
+    valori(numero, cifra, x);
+
+    cout << endl;
+    cout << "Il numero al contrario e' ";
+
+    for(int i = 0; i<CIFRE_TOTALI; i++){
+        cout << cifra[i];
+    }
+
+    cout << endl;
     return 0;
 }
 
-m*1000 c*100 d*10 u*1
 
-m=num/1000
-c=(num%1000)/100
-d=((num%1000)%100)/10
-u =((num%1000)%100)%10
-
-int x = 1000
-
-if(num = una cifra)
-    for(i=0; i<CIFRE_TOTALI; i++)
-        valori(num%(x/10));
