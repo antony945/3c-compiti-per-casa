@@ -9,8 +9,8 @@ void stampa(int v[], int n);
 int somma(int v[], int n);
 
 int main(){
-    int vettore[10];
-    int dimensione_array;
+    int dimensione_array = 0;
+    int vettore[dimensione_array];
 
     dimensione_array = ottieniDimensione();
     caricamento(vettore, dimensione_array);
@@ -59,7 +59,7 @@ void indirizzo(int v[], int n){
 void stampa(int v[], int n){
     cout << endl << "Il vettore e' composto da: ";
     cout << endl;
-    for(int i=0; i<10; i++){
+    for(int i=0; i<n; i++){
         cout << " - [" << i+1 << "] = " << v[i] << " ";
         cout << endl;
     }
