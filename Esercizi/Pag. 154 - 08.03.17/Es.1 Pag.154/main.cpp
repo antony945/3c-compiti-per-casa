@@ -24,8 +24,13 @@ int main(){
 
     for(i=1;i<100;i++){
         if(array[i] == 1)
-            cout <<  "\t" << i;
+            cout << i;
     }
+
+    cout << endl;
+
+    for(i=0; i<100; i++)
+        cout << array[i] << endl;
 
     system("PAUSE");
     return 0;

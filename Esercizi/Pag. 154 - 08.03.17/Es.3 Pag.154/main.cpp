@@ -9,7 +9,6 @@ int dimensioneArray(int v[]);
 void caricamentoArray(int v[], int limite);
 void stampaInversa(int v[], int limite);
 
-
 int main(){
     int N = 0;
     int V[N];
