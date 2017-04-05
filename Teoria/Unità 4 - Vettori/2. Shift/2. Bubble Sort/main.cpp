@@ -51,8 +51,7 @@ void bubbleSort(int v[], int n){
             if(v[i] > v[i+1]){
                 swap(v, n, i, i+1);
                 swapper = true;
-                k = i+1; /*NON si può mettere soltanto k=i perchè i è la posizione del numero maggiore PRIMA di
-                           essere scambiato e dopo essere stato scambiato il maggiore avanza di una posizione percio k=i+1*/
+                k = i+1;
             }
         }
     };
