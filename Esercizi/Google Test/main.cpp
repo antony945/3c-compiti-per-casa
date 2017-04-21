@@ -1,51 +1,44 @@
 #include <iostream>
+#include "../array.h"
 
 using namespace std;
 
-void loadArray(int v[], int n);
 bool testSum(int v[], int n);
 
 int main(){
     int dim = 4;
     int vet[dim];
 
-    loadArray(vet, dim);
+    caricamento(vet, dim);
 
     if(testSum(vet, dim))
         cout << "Vero.";
     else
         cout << "Falso.";
 
+    cout << endl;
+
     return 0;
 }
 
 bool testSum(int v[], int n){
-    bool test = false;
-
     int sum;
     cout << "Sum: ";
     cin >> sum;
 
-    int i = 0;
-    int j = n-1;
-    while(v[i] + v[j] != sum){
-        if((v[i]+v[j]) > sum)
-                j--;
-        else if((v[i]+v[j]) < sum)
+    bubbleSort(v, n);
+
+    int i=0;
+    int j=n-1;
+
+    do{
+        if(v[i]+v[j] > sum)
+            j--;
+        if(v[i]+v[j] < sum)
             i++;
-        else
-            test = true;
-    }
+        if(v[i]+v[j] == sum)
+            return true;
+    }while(i!=j);
 
-    return test;
-}
-
-void loadArray(int v[], int n){
-    int num;
-
-    for(int i=0; i<n; i++){
-        cout << "vet[" << i << "] = ";
-        cin >> num;
-        v[i] = num;
-    }
+    return false;
 }
