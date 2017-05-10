@@ -1,0 +1,22 @@
+<html> //tutto il codice va racchiuso dentro <html>
+   <head>
+      <meta> //Contiene attributi
+      <title> </title> //Scritta in alto sulla scheda del browser
+      <link href="link">
+
+      <script type="text/nome altro codice(javascript, css, ecc.)"> //CODICE NON HTML
+
+      </script>
+   </head>
+   <body>
+      <div> //Seleziona una parte di pagina (si può modificare la dimensione, ecc.)	
+         <a href="link"></a> //Porta ad un link
+      </div>
+   </body>
+</html>
+
+HTML: Scrive elementi ma NON si occupa della loro visualizzazione
+CSS: Si occupa della visualizzazione degli elementi (font, tipo carattere, grandezza rettangoli, colori, ecc.)
+JAVASCRIPT: Gestisce tutte le azioni nelle quali vi è presente un'animazione
+
+<nome tag 'attributi'>
