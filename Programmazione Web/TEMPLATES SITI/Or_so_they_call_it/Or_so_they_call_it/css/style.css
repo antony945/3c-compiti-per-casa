@@ -1,0 +1,318 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	background: #FFF;
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, Geneva, sans-serif;
+	font-size: 12px;
+}
+
+#header_wrapper
+{
+	width: 85%;
+	margin: 0 auto;
+	border-width: 0 2px;
+	border-style: solid;
+	border-color: #930;
+	padding: 0;
+	background: #40657B url(../images/header_repeat2.jpg) top right repeat-x;
+}
+
+#header
+{
+	margin: 0;
+	padding: 0;
+	height: 193px;
+	background: url(../images/top2.jpg) top left no-repeat;
+}
+
+#header h1
+{
+	font-size: 3em;
+	color: #000;
+	text-align: right;
+	margin: 0;
+	padding: 10px 20px 0 0;
+	height: 45px;
+	border-bottom: none;
+	font-variant:small-caps;
+}
+
+#header h2
+{
+	font-size: 1.8em;
+	color: #242424;
+	text-align: right;
+	margin: 0;
+	padding: 0 20px 0 0;
+	height: 39px;
+}
+
+#menu
+{
+
+	float: right;
+	margin: 38px 0 0 0;
+	padding: 0 20px;
+	height: 60px;
+	display: block;
+}
+
+#menu li
+{
+	display: block;
+	text-align: center;
+	float: left;
+	list-style: none;
+	
+}
+
+#menu li a
+{
+	background-image: url(../images/tabs2.gif);
+	color: #FFF;
+	text-decoration: none;
+	font-weight: 700;
+	display: block;
+	width: 110px;
+	height: 25px;
+	margin: 33px 0 0 0;
+	padding: 5px 0 0 0;
+	background-position: 0 30px;
+	border: 0;
+}
+
+#menu li.active a,#menu li.active a:hover
+{
+	color: #000;
+	margin: 3px 0 26px 0;
+	padding: 6px 0 0 0; 
+	height: 22px;
+	background-position: 0 0;
+}
+
+#menu li a:hover
+{
+	background-position: 0 60px;
+}
+
+#body
+{
+	width: 85%;
+	background-color: #40657B;
+	border-width: 0 2px;
+	border-style: solid;
+	border-color: #930;
+	margin: 0 auto;
+	padding: 10px 0;
+}
+
+.left, .right
+{
+	color:#759EB7;
+	width: 155px;
+	float: left;
+	margin: 0 0 0 5px;
+}
+
+.right
+{
+	float: right;
+	margin: 0 5px 0 0;
+}
+
+
+.main
+{
+	color: #FFF;
+	width: auto;
+	margin: 0 175px;
+}
+
+.double-left
+{
+	margin-left: 335px;
+	margin-right: 5px;
+}
+
+.double-right
+{
+	margin-right: 335px;
+	margin-left: 5px;
+}
+
+.no-left
+{
+	margin-left: 5px;
+}
+
+.no-right
+{
+	margin-right: 5px;
+}
+
+#footer
+{
+	clear: both;
+	background: #476D85;
+	border-width: 1px 0; 
+	border-color: #C5C5C5;
+	border-style: solid;
+	margin: 20px auto 10px auto;
+	vertical-align: middle;
+	text-align: center;
+	padding: 10px 0;
+	font-weight: 700;
+	color: #C5C5C5;
+}
+
+#footer a
+{
+	color: #C5C5C5;
+}
+
+.indent
+{
+ 	margin-left: 20px;
+}
+
+ul.links, .menu ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+ul.links li, .menu ul li
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul.links li a, .menu ul li a
+{
+	display: block;
+	padding: 3px;
+	margin: 1px;
+	line-height: 1.1em;
+	height: 1.5em;
+}
+
+ul.links li a:hover, .menu ul li a:hover
+{
+	color: #C5C5C5;
+	background-color: #476D85;
+}
+
+.menu ul li a
+{
+	border: 0;
+}
+
+.menu ul li ul
+{
+	margin-left: 15px;
+}
+
+li.collapsed, li.expanded
+{
+	font-weight: 700;
+}
+
+li.leaf
+{
+	font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+	margin: 5px 0 0 0;
+	padding: 0;
+}
+
+h1
+{
+	border-bottom: 1px solid;
+}
+
+
+p
+{
+	margin-top: .5em;
+}
+
+.right h3, .left h3
+{
+	font-size: 1.7em;
+	margin: 5px 0 0 0;
+	padding: 3px;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-color: #759EB7;
+}
+
+a
+{
+	text-decoration: none;
+	border-bottom: 1px dotted;
+	color: #EEE;
+}
+
+form
+{
+	margin: 0;
+	padding: 0;
+}
+
+form input, form textarea, form select
+{
+	color: #FFF;
+	background-color: #476D85;
+	border: 1px solid;
+	margin: 5px;
+}
+
+form label
+{
+	color: #759EB7;
+	display: block;
+	width: 120px;
+}
+
+form input[type="password"]
+{
+	color: #476D85;
+	border-color: #FFF;
+}
+
+blockquote {
+	margin: 5px;
+  background: transparent url(../images/quote.gif) left top no-repeat;
+	padding: 4px;
+	padding-left: 45px;
+	border: 2px dotted #476D85;
+}
+
+blockquote[cite]:after {
+	content: "Quote from: " attr(cite);
+	display: block;
+	border-top: 1px solid #999;
+	color: #999;
+	margin: 1em 0 0;
+	padding: .5em 0 0;
+	font-size: .8em;
+	font-weight: bold;
+}
+
+
+dt
+{
+  font-weight: bold;
+	font-size: 1.05em;
+	color: #ad4c21;
+}
+
+dd 
+{
+  margin-left: 15px;
+}
